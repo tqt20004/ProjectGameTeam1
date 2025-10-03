@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
-using UnityEngine.InputSystem;
+//using UnityEngine.InputSystem;
 #endif
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
@@ -10,7 +10,7 @@ namespace StarterAssets
 {
     [RequireComponent(typeof(CharacterController))]
 #if ENABLE_INPUT_SYSTEM
-    [RequireComponent(typeof(PlayerInput))]
+    //[RequireComponent(typeof(PlayerInput))]
 #endif
     public class ThirdPersonController : MonoBehaviour
     {
@@ -99,7 +99,7 @@ namespace StarterAssets
         private int _animIDMotionSpeed;
 
 #if ENABLE_INPUT_SYSTEM
-        private PlayerInput _playerInput;
+        //private PlayerInput _playerInput;
 #endif
         private Animator _animator;
         private CharacterController _controller;
@@ -108,19 +108,19 @@ namespace StarterAssets
 
         private const float _threshold = 0.01f;
 
-        private bool _hasAnimator;
+//        private bool _hasAnimator;
 
-        private bool IsCurrentDeviceMouse
-        {
-            get
-            {
-#if ENABLE_INPUT_SYSTEM
-                return _playerInput.currentControlScheme == "KeyboardMouse";
-#else
-				return false;
-#endif
-            }
-        }
+//        //private bool IsCurrentDeviceMouse
+//        {
+//            //get
+//            {
+//#if ENABLE_INPUT_SYSTEM
+//                //return _playerInput.currentControlScheme == "KeyboardMouse";
+//#else
+//				return false;
+//#endif
+//            }
+//        }
 
 
         private void Awake()
@@ -136,11 +136,11 @@ namespace StarterAssets
         {
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
             
-            _hasAnimator = TryGetComponent(out _animator);
+            //_hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
 #if ENABLE_INPUT_SYSTEM
-            _playerInput = GetComponent<PlayerInput>();
+            //_playerInput = GetComponent<PlayerInput>();
 #else
 			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
@@ -154,7 +154,7 @@ namespace StarterAssets
 
         private void Update()
         {
-            _hasAnimator = TryGetComponent(out _animator);
+            //_hasAnimator = TryGetComponent(out _animator);
 
             JumpAndGravity();
             GroundedCheck();
@@ -184,10 +184,10 @@ namespace StarterAssets
                 QueryTriggerInteraction.Ignore);
 
             // update animator if using character
-            if (_hasAnimator)
-            {
-                _animator.SetBool(_animIDGrounded, Grounded);
-            }
+            //if (_hasAnimator)
+            //{
+            //    _animator.SetBool(_animIDGrounded, Grounded);
+            //}
         }
 
         private void CameraRotation()
@@ -195,11 +195,11 @@ namespace StarterAssets
             // if there is an input and camera position is not fixed
             if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
             {
-                //Don't multiply mouse input by Time.deltaTime;
-                float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
+                ////Don't multiply mouse input by Time.deltaTime;
+                //float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
-                _cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
-                _cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
+                //_cinemachineTargetYaw += _input.look.x * deltaTimeMultiplier;
+                //_cinemachineTargetPitch += _input.look.y * deltaTimeMultiplier;
             }
 
             // clamp our rotations so our values are limited 360 degrees
@@ -272,7 +272,7 @@ namespace StarterAssets
                              new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 
             // update animator if using character
-            if (_hasAnimator)
+            //if (_hasAnimator)
             {
                 _animator.SetFloat(_animIDSpeed, _animationBlend);
                 _animator.SetFloat(_animIDMotionSpeed, inputMagnitude);
@@ -287,55 +287,55 @@ namespace StarterAssets
                 _fallTimeoutDelta = FallTimeout;
 
                 // update animator if using character
-                if (_hasAnimator)
-                {
-                    _animator.SetBool(_animIDJump, false);
-                    _animator.SetBool(_animIDFreeFall, false);
-                }
+            //    if (_hasAnimator)
+            //    {
+            //        _animator.SetBool(_animIDJump, false);
+            //        _animator.SetBool(_animIDFreeFall, false);
+            //    }
 
-                // stop our velocity dropping infinitely when grounded
-                if (_verticalVelocity < 0.0f)
-                {
-                    _verticalVelocity = -2f;
-                }
+            //    // stop our velocity dropping infinitely when grounded
+            //    if (_verticalVelocity < 0.0f)
+            //    {
+            //        _verticalVelocity = -2f;
+            //    }
 
-                // Jump
-                if (_input.jump && _jumpTimeoutDelta <= 0.0f)
-                {
-                    // the square root of H * -2 * G = how much velocity needed to reach desired height
-                    _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
+            //    // Jump
+            //    if (_input.jump && _jumpTimeoutDelta <= 0.0f)
+            //    {
+            //        // the square root of H * -2 * G = how much velocity needed to reach desired height
+            //        _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
 
-                    // update animator if using character
-                    if (_hasAnimator)
-                    {
-                        _animator.SetBool(_animIDJump, true);
-                    }
-                }
+            //        // update animator if using character
+            //        if (_hasAnimator)
+            //        {
+            //            _animator.SetBool(_animIDJump, true);
+            //        }
+            //    }
 
-                // jump timeout
-                if (_jumpTimeoutDelta >= 0.0f)
-                {
-                    _jumpTimeoutDelta -= Time.deltaTime;
-                }
-            }
-            else
-            {
-                // reset the jump timeout timer
-                _jumpTimeoutDelta = JumpTimeout;
+            //    // jump timeout
+            //    if (_jumpTimeoutDelta >= 0.0f)
+            //    {
+            //        _jumpTimeoutDelta -= Time.deltaTime;
+            //    }
+            //}
+            //else
+            //{
+            //    // reset the jump timeout timer
+            //    _jumpTimeoutDelta = JumpTimeout;
 
-                // fall timeout
-                if (_fallTimeoutDelta >= 0.0f)
-                {
-                    _fallTimeoutDelta -= Time.deltaTime;
-                }
-                else
-                {
-                    // update animator if using character
-                    if (_hasAnimator)
-                    {
-                        _animator.SetBool(_animIDFreeFall, true);
-                    }
-                }
+            //    // fall timeout
+            //    if (_fallTimeoutDelta >= 0.0f)
+            //    {
+            //        _fallTimeoutDelta -= Time.deltaTime;
+            //    }
+            //    else
+            //    {
+            //        // update animator if using character
+            //        if (_hasAnimator)
+            //        {
+            //            _animator.SetBool(_animIDFreeFall, true);
+            //        }
+            //    }
 
                 // if we are not grounded, do not jump
                 _input.jump = false;
